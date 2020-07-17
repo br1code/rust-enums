@@ -89,15 +89,15 @@ variants will have associated ``String`` values:
 
 We attach data to each variant of the ``enum`` directly, so there is no need for an extra ``struct``.
 ````rust
-enum IpAddress {
+enum IpAddrKind {
     V4(String),
     V6(String),
 }
 
 fn main() {
-    let home = IpAddress::V4(String::from("127.0.0.1"));
+    let home = IpAddrKind::V4(String::from("127.0.0.1"));
 
-    let loopback = IpAddress::V6(String::from("::1"));
+    let loopback = IpAddrKind::V6(String::from("::1"));
 }
 ````
 
@@ -106,15 +106,15 @@ Version four type IP addresses will always have four numeric components that wil
 If we wanted to store ``V4`` addresses as four ``u8`` values but still express ``V6`` addresses as one ``String`` value, we wouldn’t
 be able to with a ``struct``. Enums handle this case with ease:
 ````rust
-enum IpAddress {
+enum IpAddrKind {
     V4(u8, u8, u8, u8),
     V6(String),
 }
 
 fn main() {
-    let home = IpAddress::V4(127, 0, 0, 1);
+    let home = IpAddrKind::V4(127, 0, 0, 1);
 
-    let loopback = IpAddress2::V6(String::from("::1"));
+    let loopback = IpAddrKind::V6(String::from("::1"));
 
 }
 ````
@@ -301,7 +301,7 @@ If you want to run multiple lines of code in a ``match`` arm, you can use curly 
 For example, the following code would print ``“Lucky penny!”`` every time the method was called with a ``Coin::Penny``
 but would still return the last value of the block, ``1``:
 ````rust
-fn value_in_cents_v2(coin: Coin) -> u8 {
+fn value_in_cents(coin: Coin) -> u8 {
     match coin {
         Coin::Penny => {
             println!("Lucky penny!");
@@ -331,7 +331,7 @@ enum UsState {
     // --snip--
 }
 
-enum CoinV2 {
+enum Coin {
     Penny,
     Nickel,
     Dime,
@@ -347,12 +347,12 @@ In the ``match`` expression for this code, we add a variable called ``state`` to
 the variant ``Coin::Quarter``. When a ``Coin::Quarter`` matches, the ``state`` variable will bind to the value of that quarter’s state.
 Then we can use ``state`` in the code for that arm, like so:
 ````rust
-fn value_in_cents_v3(coin: CoinV2) -> u8 {
+fn value_in_cents_v3(coin: Coin) -> u8 {
     match coin {
-        CoinV2::Penny => 1,
-        CoinV2::Nickel => 5,
-        CoinV2::Dime => 10,
-        CoinV2::Quarter(state) => {
+        Coin::Penny => 1,
+        Coin::Nickel => 5,
+        Coin::Dime => 10,
+        Coin::Quarter(state) => {
             println!("State quarter from {:?}!", state);
             25
         }
